@@ -9,22 +9,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-js-sys = "0.3.68"
 wasm-bindgen = "0.2.91"
-
-[dependencies.web-sys]
-version = "0.3.68"
-features = [
-  'Document',
-  'Element',
-  'HtmlCanvasElement',
-  'WebGlBuffer',
-  'WebGlVertexArrayObject',
-  'WebGl2RenderingContext',
-  'WebGlProgram',
-  'WebGlShader',
-  'Window',
-]
 
 [[bin]]
 name = "sandfall"
