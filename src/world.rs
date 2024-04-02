@@ -35,10 +35,12 @@ impl ParticleWorld {
     }
 
     pub fn split_tree(&mut self) {
+        if self.is_leaf(){
             self._quadrants[0] = Some(Box::new(ParticleWorld::new(None, (self._boundaries.0, self._boundaries.1, self._boundaries.2/2, self._boundaries.3/2))));
             self._quadrants[1] = Some(Box::new(ParticleWorld::new(None, (self._boundaries.0+self._boundaries.2/2, self._boundaries.1, self._boundaries.2, self._boundaries.3/2))));
             self._quadrants[2] = Some(Box::new(ParticleWorld::new(None, (self._boundaries.0, self._boundaries.1+self._boundaries.3/2, self._boundaries.2/2, self._boundaries.3))));
             self._quadrants[3] = Some(Box::new(ParticleWorld::new(None, (self._boundaries.0+self._boundaries.2/2, self._boundaries.1+self._boundaries.3/2, self._boundaries.2, self._boundaries.3))));
+        }
     }
 
     pub fn is_leaf(&self) -> bool {
