@@ -54,5 +54,17 @@ impl ParticleWorld {
     pub fn is_at_max_depth(&self) -> bool {
         (self._boundaries.0 == self._boundaries.2) && (self._boundaries.1 == self._boundaries.3)
     }
+
+    pub fn insert(&mut self, particle: Particle, x: u32, y: u32){
+        if self.is_at_max_depth() {
+            self._particle = Some(particle);
+        }
+        else {
+            self.split_tree();
+            for quadrant in self._quadrants.iter_mut().flat_map(|opt_box| opt_box){
+                println!("{}", quadrant.contains_coords(x, y));
+            }
+        }
+    }
 }
 
