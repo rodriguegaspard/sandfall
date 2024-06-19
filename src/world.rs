@@ -2,7 +2,6 @@ use wasm_bindgen::prelude::*;
 use crate::Particle;
 
 #[wasm_bindgen]
-#[derive(Debug)]
 pub struct ParticleWorld{
     _particle: Option<Particle>,
     _boundaries : (u32, u32, u32, u32), //x1, y1, x2, y2 (top-left and bottom-right corner)
