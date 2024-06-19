@@ -24,13 +24,8 @@ impl ParticleWorld {
         }
     }
 
-    pub fn print_bounds(&self) {
-        println!("The boundaries of this quadrant are : ({};{}) and ({};{})", &self._boundaries.0, &self._boundaries.1, &self._boundaries.2, &self._boundaries.3);
-        for q in &self._quadrants {
-            if let Some(child) = q {
-                child.print_bounds();
-            }
-        }
+    pub fn print_bounds(&self) -> String {
+        return format!("The boundaries of this quadrant are : ({};{}) and ({};{})", &self._boundaries.0, &self._boundaries.1, &self._boundaries.2, &self._boundaries.3);
     }
 
     pub fn split_tree(&mut self) {
