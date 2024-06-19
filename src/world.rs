@@ -51,14 +51,45 @@ impl ParticleWorld {
         (self._boundaries.0 + 1 == self._boundaries.2) && (self._boundaries.1 + 1 == self._boundaries.3)
     }
 
-    pub fn insert(&mut self, particle: Particle, x: u32, y: u32){
-        if self.is_at_max_depth() {
-            self._particle = Some(particle);
+    pub fn insert(&mut self, particle: Particle, x: u32, y: u32) -> bool {
+        if !self.contains_coords(x, y){
+            println!("Not in coords.");
+            self.print_bounds();
+            return false
         }
-        else {
-            self.split_tree();
-            for quadrant in self._quadrants.iter_mut().flat_map(|opt_box| opt_box){
-                println!("{}", quadrant.contains_coords(x, y));
+        else{
+            if self.is_at_max_depth() && self._particle.is_none(){
+                self._particle = Some(particle);
+                println!("{}", self.print_particle());
+                return true
+            }
+            else{
+                if self.is_leaf(){
+                    print!(" ! ");
+                    self.split_tree();
+                }
+
+                println!("{}", self.print_bounds());
+
+                if self._quadrants[0].as_ref().unwrap().contains_coords(x, y){
+                    print!("bl ");
+                    return self._quadrants[0].as_mut().unwrap().insert(particle, x, y)
+                }
+                if self._quadrants[1].as_ref().unwrap().contains_coords(x, y){
+                    print!("br ");
+                    return self._quadrants[1].as_mut().unwrap().insert(particle, x, y)
+                }
+                if self._quadrants[2].as_ref().unwrap().contains_coords(x, y){
+                    print!("tl ");
+                    return self._quadrants[2].as_mut().unwrap().insert(particle, x, y)
+                }
+                if self._quadrants[3].as_ref().unwrap().contains_coords(x, y){
+                    print!("tr ");
+                    return self._quadrants[3].as_mut().unwrap().insert(particle, x, y)
+                }
+
+                println!("Something is very wrong.");
+                return false;
             }
         }
     }
