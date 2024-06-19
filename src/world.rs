@@ -44,7 +44,7 @@ impl ParticleWorld {
     }
 
     pub fn contains_coords(&self, x: u32, y: u32) -> bool {
-        (self._boundaries.0 <= x) && (self._boundaries.1 <= y) && (self._boundaries.2 >= x) && (self._boundaries.3 >= y)
+        (self._boundaries.0 <= x) && (self._boundaries.1 <= y) && (self._boundaries.2 > x) && (self._boundaries.3 > y)
     }
 
     pub fn is_at_max_depth(&self) -> bool {
