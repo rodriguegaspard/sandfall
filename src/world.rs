@@ -19,8 +19,8 @@ impl ParticleWorld {
 
     pub fn print_particle(&self) -> String {
         match &self._particle{
-            Some(particle) => format!("{}{}", "This particle is made of ", particle.element()),
-            None => "".to_string(),
+            Some(particle) => format!("This particle is made of {} and is at ({};{})({};{})" , particle.element(), &self._boundaries.0, &self._boundaries.1, &self._boundaries.2, &self._boundaries.3),
+            None => "Nothing!".to_string(),
         }
     }
 
