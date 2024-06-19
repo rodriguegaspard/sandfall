@@ -48,7 +48,7 @@ impl ParticleWorld {
     }
 
     pub fn is_at_max_depth(&self) -> bool {
-        (self._boundaries.0 == self._boundaries.2) && (self._boundaries.1 == self._boundaries.3)
+        (self._boundaries.0 + 1 == self._boundaries.2) && (self._boundaries.1 + 1 == self._boundaries.3)
     }
 
     pub fn insert(&mut self, particle: Particle, x: u32, y: u32){
