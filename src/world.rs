@@ -53,7 +53,6 @@ impl ParticleWorld {
 
     pub fn insert(&mut self, particle: Particle, x: u32, y: u32) -> bool {
         if !self.contains_coords(x, y){
-            println!("Not in coords.");
             self.print_bounds();
             return false
         }
@@ -65,30 +64,13 @@ impl ParticleWorld {
             }
             else{
                 if self.is_leaf(){
-                    print!(" ! ");
                     self.split_tree();
                 }
-
-                println!("{}", self.print_bounds());
-
-                if self._quadrants[0].as_ref().unwrap().contains_coords(x, y){
-                    print!("bl ");
-                    return self._quadrants[0].as_mut().unwrap().insert(particle, x, y)
+                for child in &mut self._quadrants {
+                    if child.as_mut().unwrap().contains_coords(x, y){
+                        return child.as_mut().unwrap().insert(particle, x, y);
+                    }
                 }
-                if self._quadrants[1].as_ref().unwrap().contains_coords(x, y){
-                    print!("br ");
-                    return self._quadrants[1].as_mut().unwrap().insert(particle, x, y)
-                }
-                if self._quadrants[2].as_ref().unwrap().contains_coords(x, y){
-                    print!("tl ");
-                    return self._quadrants[2].as_mut().unwrap().insert(particle, x, y)
-                }
-                if self._quadrants[3].as_ref().unwrap().contains_coords(x, y){
-                    print!("tr ");
-                    return self._quadrants[3].as_mut().unwrap().insert(particle, x, y)
-                }
-
-                println!("Something is very wrong.");
                 return false;
             }
         }
