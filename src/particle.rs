@@ -1,7 +1,7 @@
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Particle{
     _element: String,
 }

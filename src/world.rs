@@ -25,7 +25,7 @@ impl ParticleWorld {
     }
 
     pub fn print_bounds(&self) -> String {
-        return format!("The boundaries of this quadrant are : ({};{}) and ({};{})", &self._boundaries.0, &self._boundaries.1, &self._boundaries.2, &self._boundaries.3);
+        format!("The boundaries of this quadrant are : ({};{}) and ({};{})", &self._boundaries.0, &self._boundaries.1, &self._boundaries.2, &self._boundaries.3)
     }
 
     pub fn split_tree(&mut self) {
@@ -54,13 +54,13 @@ impl ParticleWorld {
     pub fn insert(&mut self, particle: Particle, x: u32, y: u32) -> bool {
         if !self.contains_coords(x, y){
             self.print_bounds();
-            return false
+            false
         }
         else{
             if self.is_at_max_depth() && self._particle.is_none(){
                 self._particle = Some(particle);
                 println!("{}", self.print_particle());
-                return true
+                true
             }
             else{
                 if self.is_leaf(){
@@ -71,8 +71,22 @@ impl ParticleWorld {
                         return child.as_mut().unwrap().insert(particle, x, y);
                     }
                 }
-                return false;
+                false
             }
+        }
+    }
+
+    pub fn search(&self, x: u32, y: u32) -> Option<Particle> {
+        if self.is_at_max_depth(){
+            self._particle.clone()
+        }
+        else{
+            for child in &self._quadrants {
+                if child.as_ref().unwrap().contains_coords(x, y){
+                    return child.as_ref().unwrap().search(x, y);
+                }
+            }
+            None
         }
     }
 }

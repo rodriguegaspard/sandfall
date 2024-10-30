@@ -14,4 +14,8 @@ fn main() {
     w.insert(p2, 0, 0);
     w.insert(p3, 0, 1);
     w.insert(p4, 1, 0);
+    println!("The element is {}", w.search(1,1).expect("Whoopsie").element());
+    println!("The element is {}", w.search(0,1).expect("Whoopsie").element());
+    println!("The element is {}", w.search(1,0).expect("Whoopsie").element());
+    println!("The element is {}", w.search(1,1).expect("Whoopsie").element());
 }
