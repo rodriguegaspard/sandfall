@@ -3,14 +3,15 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 #[derive(Clone, Debug)]
 pub struct Particle{
-    _element: String,
+    _id: u8,
 }
 
 impl Particle{
-    pub fn new(_element: String) -> Particle {
-        Particle { _element }
+    pub fn new(_id: u8) -> Particle {
+        Particle { _id }
     }
-    pub fn element(&self) -> &String {
-        &self._element
+
+    pub fn element(&self) -> String {
+        String::from("Placeholder")
     }
 }

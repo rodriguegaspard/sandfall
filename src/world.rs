@@ -5,7 +5,7 @@ use crate::Particle;
 pub struct ParticleWorld{
     _particle: Option<Particle>,
     _boundaries : (u32, u32, u32, u32), //x1, y1, x2, y2 (top-left and bottom-right corner)
-    _quadrants: [Option<Box<ParticleWorld>>; 4]
+    _quadrants: [Option<Box<ParticleWorld>>; 4],
 }
 
 impl ParticleWorld {
@@ -13,7 +13,7 @@ impl ParticleWorld {
         ParticleWorld {
             _particle,
             _boundaries,
-            _quadrants: [None, None, None, None]
+            _quadrants: [None, None, None, None],
         }
     }
 
