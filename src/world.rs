@@ -56,7 +56,6 @@ impl ParticleWorld {
 
     pub fn insert(&mut self, particle: Particle, x: u32, y: u32) -> bool {
         if !self.contains_coords(x, y){
-            self.print_bounds();
             false
         }
         else if self.is_at_max_depth() && self._particle.is_none(){
