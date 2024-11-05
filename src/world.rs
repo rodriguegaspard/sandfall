@@ -1,5 +1,5 @@
 use wasm_bindgen::prelude::*;
-use crate::Particle;
+use crate::{element::ElementTable, Particle};
 
 #[wasm_bindgen]
 pub struct ParticleWorld{
@@ -17,9 +17,9 @@ impl ParticleWorld {
         }
     }
 
-    pub fn print_particle(&self) -> String {
+    pub fn print_particle(&self, elements: &ElementTable) -> String {
         match &self._particle{
-            Some(particle) => format!("This particle is made of {} and is at ({};{})({};{})" , particle.element(), &self._boundaries.0, &self._boundaries.1, &self._boundaries.2, &self._boundaries.3),
+            Some(particle) => format!("This particle is made of {} and is at ({};{})({};{})" , particle.element(elements), &self._boundaries.0, &self._boundaries.1, &self._boundaries.2, &self._boundaries.3),
             None => "Nothing!".to_string(),
         }
     }
@@ -59,7 +59,6 @@ impl ParticleWorld {
         else{
             if self.is_at_max_depth() && self._particle.is_none(){
                 self._particle = Some(particle);
-                println!("{}", self.print_particle());
                 true
             }
             else{

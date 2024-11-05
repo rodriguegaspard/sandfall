@@ -17,5 +17,6 @@ extern {
 fn print_test() {
     let p1 = Particle::new(0);
     let w = ParticleWorld::new(Some(p1),(0, 0, 800, 800));
-    alert(&w.print_particle());
+    let e = ElementTable::default();
+    println!("{}", &w.print_particle(&e));
 }

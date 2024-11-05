@@ -43,7 +43,11 @@ impl Default for ElementTable{
 }
  
 impl ElementTable{
-    pub fn table(&self) -> &[Element; 5]{
-        &self._table
+    pub fn name(&self, id: usize) -> &String{
+        &self._table[id]._name
+    }
+
+    pub fn description(&self, id: usize) -> &String{
+        &self._table[id]._description
     }
 } 
