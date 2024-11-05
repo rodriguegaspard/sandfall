@@ -63,7 +63,8 @@ impl ParticleWorld {
             true
         }
         else{
-            if self.is_leaf(){
+        // This check is pretty dirty, might need to change later!
+            if self.is_leaf() && !self.is_at_max_depth(){
                 self.split_tree();
             }
             for child in &mut self._quadrants {
