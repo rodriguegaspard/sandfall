@@ -56,23 +56,22 @@ impl ParticleWorld {
             self.print_bounds();
             false
         }
-        else{
-            if self.is_at_max_depth() && self._particle.is_none(){
-                self._particle = Some(particle);
-                true
-            }
-            else{
-                if self.is_leaf(){
-                    self.split_tree();
-                }
-                for child in &mut self._quadrants {
-                    if child.as_mut().unwrap().contains_coords(x, y){
-                        return child.as_mut().unwrap().insert(particle, x, y);
-                    }
-                }
-                false
-            }
+        else if self.is_at_max_depth() && self._particle.is_none(){
+            self._particle = Some(particle);
+            true
         }
+        else{
+            if self.is_leaf(){
+                self.split_tree();
+            }
+            for child in &mut self._quadrants {
+                if child.as_mut().unwrap().contains_coords(x, y){
+                    return child.as_mut().unwrap().insert(particle, x, y);
+                }
+            }
+            false
+        }
+
     }
 
     pub fn search(&self, x: u32, y: u32) -> Option<Particle> {
