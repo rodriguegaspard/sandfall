@@ -74,9 +74,10 @@ impl ParticleWorld {
             }
             false
         }
-
     }
 
+    // Might only need to return the element id and check for the presence of a particle. The
+    // object in itself is useless.
     pub fn search(&self, x: u32, y: u32) -> Option<Particle> {
         if self.is_at_max_depth(){
             self._particle.clone()
