@@ -1,3 +1,6 @@
+// Definition of the ParticleWorld class, which is a quadtree that holds Particle objects. The methods
+// are basic quadtree operations, such as insert, range search, delete and rebalancing.
+
 use wasm_bindgen::prelude::*;
 use crate::{element::ElementTable, Particle};
 

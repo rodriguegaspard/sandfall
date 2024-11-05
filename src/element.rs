@@ -1,3 +1,5 @@
+// Definition of the Element class, which defines a Particle's behaviour.
+
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
