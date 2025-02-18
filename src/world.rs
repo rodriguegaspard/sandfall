@@ -76,16 +76,14 @@ impl ParticleWorld {
         }
     }
 
-    // Might only need to return the element id and check for the presence of a particle. The
-    // object in itself is useless.
-    pub fn search(&self, x: u32, y: u32) -> Option<Particle> {
+    pub fn search(&mut self, x: u32, y: u32) -> Option<&mut Particle> {
         if self.is_at_max_depth(){
-            self._particle.clone()
+            self._particle.as_mut()
         }
         else{
-            for child in &self._quadrants {
+            for child in &mut self._quadrants {
                 if child.as_ref().unwrap().contains_coords(x, y){
-                    return child.as_ref().unwrap().search(x, y);
+                    return child.as_mut().unwrap().search(x, y);
                 }
             }
             None
