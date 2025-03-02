@@ -1,22 +1,24 @@
 use wasm_bindgen::prelude::*;
 
-pub mod world;
-pub mod particle;
-pub mod element;
+// Called when the Wasm module is instantiated
+#[wasm_bindgen(start)]
+fn main() -> Result<(), JsValue> {
+    // Use `web_sys`'s global `window` function to get a handle on the global
+    // window object.
+    let window = web_sys::window().expect("no global `window` exists");
+    let document = window.document().expect("should have a document on window");
+    let body = document.body().expect("document should have a body");
 
-use crate::world::ParticleWorld;
-use crate::particle::Particle;
-use crate::element::ElementTable;
+    // Manufacture the element we're gonna append
+    let val = document.create_element("p")?;
+    val.set_inner_html("Hello from Rust!");
 
-#[wasm_bindgen]
-extern {
-    fn alert(s: &str);
+    body.append_child(&val)?;
+
+    Ok(())
 }
 
-#[wasm_bindgen(start)]
-fn print_test() {
-    let p1 = Particle::new(0);
-    let w = ParticleWorld::new(Some(p1),(0, 0, 800, 800));
-    let e = ElementTable::default();
-    println!("{}", &w.print_particle(&e));
+#[wasm_bindgen]
+pub fn add(a: u32, b: u32) -> u32 {
+    a + b
 }
