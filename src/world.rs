@@ -1,44 +1,69 @@
-// Definition of the ParticleWorld class, which is a quadtree that holds Particle objects. The methods
-// are basic quadtree operations, such as insert, range search, delete and rebalancing.
-
 use wasm_bindgen::prelude::*;
 use crate::{element::ElementTable, Particle};
 
 #[wasm_bindgen]
+#[derive(Clone, Copy)]
+pub struct Square{
+    _x: f64,
+    _y: f64,
+    _unit: f64
+}
+
+impl Square{
+    pub fn new(x: f64, y: f64, unit: f64) -> Self{
+        Square{
+            _x: x,
+            _y: y,
+            _unit: unit,
+        }
+    }
+    pub fn x(&self) -> f64{
+        self._x
+    }
+
+    pub fn y(&self) -> f64{
+        self._y
+    }   
+
+    pub fn unit(&self) -> f64{
+        self._unit
+    }
+}
+
+#[wasm_bindgen]
 pub struct ParticleWorld{
     _particle: Option<Particle>,
-    _boundaries : (u32, u32, u32, u32), //x1, y1, x2, y2 (top-left and bottom-right corner)
-    _quadrants: [Option<Box<ParticleWorld>>; 4],
+    _dimensions: Square, 
+    _quadrants: [Option<Box<ParticleWorld>>; 4], // northwest, northeast, southwest, southeast 
 }
 
 impl ParticleWorld {
-    pub fn new(_particle: Option<Particle>, _boundaries: (u32, u32, u32, u32)) -> Self {
+    pub fn new(dimensions: Square) -> Self {
         ParticleWorld {
-            _particle,
-            _boundaries,
+            _particle: None,
+            _dimensions: dimensions,
             _quadrants: [None, None, None, None],
         }
     }
 
     pub fn print_particle(&self, elements: &ElementTable) -> String {
         match &self._particle{
-            Some(particle) => format!("This particle is made of {} and is at ({};{})({};{})" , particle.element(elements), &self._boundaries.0, &self._boundaries.1, &self._boundaries.2, &self._boundaries.3),
+            Some(particle) => format!("This particle is made of {} and is at ({};{})" , particle.element(elements), &self._dimensions._x, &self._dimensions._y),
             None => "Nothing!".to_string(),
         }
     }
 
     pub fn print_bounds(&self) -> String {
-        format!("The boundaries of this quadrant are : ({};{}) and ({};{})", &self._boundaries.0, &self._boundaries.1, &self._boundaries.2, &self._boundaries.3)
+        format!("This quadrant had its origin at ({},{}) and is of unit {}", &self._dimensions._x, &self._dimensions._y, &self._dimensions._unit)
     }
 
     pub fn split_tree(&mut self) {
         if self.is_leaf(){
-            let ax = (self._boundaries.0 + self._boundaries.2) / 2;
-            let ay = (self._boundaries.1 + self._boundaries.3) / 2;
-            self._quadrants[0] = Some(Box::new(ParticleWorld::new(None, (self._boundaries.0, self._boundaries.1, ax, ay))));
-            self._quadrants[1] = Some(Box::new(ParticleWorld::new(None, (ax, self._boundaries.1, self._boundaries.2, ay))));
-            self._quadrants[2] = Some(Box::new(ParticleWorld::new(None, (self._boundaries.0, ay, ax, self._boundaries.3))));
-            self._quadrants[3] = Some(Box::new(ParticleWorld::new(None, (ax, ay, self._boundaries.2, self._boundaries.3))));
+            let half_unit = self._dimensions._unit / 2.0;
+            self._quadrants[0] = Some(Box::new(ParticleWorld::new(Square::new(self._dimensions._x, self._dimensions._y, half_unit))));
+            self._quadrants[1] = Some(Box::new(ParticleWorld::new(Square::new(self._dimensions._x + half_unit, self._dimensions._y, half_unit))));
+            self._quadrants[2] = Some(Box::new(ParticleWorld::new(Square::new(self._dimensions._x, self._dimensions._y + half_unit, self._dimensions._unit))));
+            self._quadrants[3] = Some(Box::new(ParticleWorld::new(Square::new(self._dimensions._x + half_unit, self._dimensions._y + half_unit, self._dimensions._unit))));
         }
     }
 
@@ -46,12 +71,12 @@ impl ParticleWorld {
         self._quadrants[0].is_none()
     }
 
-    pub fn contains_coords(&self, x: u32, y: u32) -> bool {
-        (self._boundaries.0 <= x) && (self._boundaries.1 <= y) && (self._boundaries.2 > x) && (self._boundaries.3 > y)
+    pub fn contains(&self, x: f64, y: f64) -> bool {
+        (self._dimensions._x + self._dimensions._unit >= x) && (self._dimensions._y + self._dimensions._unit >= y)  
     }
 
     pub fn is_at_max_depth(&self) -> bool {
-        (self._boundaries.0 + 1 == self._boundaries.2) && (self._boundaries.1 + 1 == self._boundaries.3)
+        self._dimensions._unit <= 1.0
     }
 
     pub fn insert(&mut self, particle: Particle, x: u32, y: u32) -> bool {
@@ -76,18 +101,18 @@ impl ParticleWorld {
         }
     }
 
-    pub fn search(&mut self, x: u32, y: u32) -> Option<&mut Particle> {
+
+    pub fn search(&mut self, x: f64, y: f64) -> Option<&mut Particle> {
         if self.is_at_max_depth(){
             self._particle.as_mut()
         }
         else{
             for child in &mut self._quadrants {
-                if child.as_ref().unwrap().contains_coords(x, y){
+                if child.as_ref().unwrap().contains(x, y){
                     return child.as_mut().unwrap().search(x, y);
                 }
             }
             None
         }
     }
-}
 
