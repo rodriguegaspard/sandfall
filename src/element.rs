@@ -1,5 +1,3 @@
-// Definition of the Element class, which defines a Particle's behaviour.
-
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -9,7 +7,8 @@ pub struct Element{
     _description : String
 }
 
-// In the future, add categories (organics, liquids, solids, gases..)
+#[wasm_bindgen]
+#[derive(Debug)]
 pub struct ElementTable{
     _table : [Element; 5]
 }
