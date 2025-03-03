@@ -124,8 +124,10 @@ impl ParticleWorld {
     }
 
     pub fn get_particles(&self, data: &mut Vec<Square>){
-        if self.is_at_max_depth() && self._particle.is_some(){
-            data.push(self._dimensions);
+        if self.is_leaf(){
+            if self.is_at_max_depth() && self._particle.is_some(){
+                data.push(self._dimensions);
+            }
         }
         else {
             for child in &self._quadrants{
@@ -149,3 +151,28 @@ impl ParticleWorld {
         }
     }
 
+    pub fn delete(&mut self, x: f64, y: f64) {
+        if self.is_at_max_depth() && self.contains(x, y){
+            self._particle = None;
+        }
+        else {
+            for child in &mut self._quadrants {
+                if child.as_mut().unwrap().contains(x, y){
+                    child.as_mut().unwrap().delete(x, y);
+                }
+            }
+        }
+    }
+
+    pub fn balance(&mut self) -> bool {
+        if self.is_at_max_depth() && self._particle.is_none(){
+            true;
+        }
+        for child in &mut self._quadrants {
+            if child.as_mut().unwrap().balance(){
+                false;
+            }
+        }
+        false
+    }
+}
