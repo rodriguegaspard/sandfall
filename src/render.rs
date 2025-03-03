@@ -11,6 +11,7 @@ pub struct ParticleRenderer;
 impl Renderer for ParticleRenderer{
     fn draw (&self, data: &Vec<Square>, context: &CanvasRenderingContext2d) {
         for point in data {
+            context.set_fill_style_str("blue");
             context.fill_rect(point.x(), point.y(), point.unit(), point.unit());
         }
     }
@@ -21,6 +22,7 @@ pub struct QuadrantRenderer;
 impl Renderer for QuadrantRenderer {
     fn draw (&self, data: &Vec<Square>, context: &CanvasRenderingContext2d) {
         for quadrant in data {
+            context.set_stroke_style_str("red");
             context.stroke_rect(quadrant.x(), quadrant.y(), quadrant.unit(), quadrant.unit());
         }
     }
