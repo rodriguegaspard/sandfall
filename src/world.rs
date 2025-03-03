@@ -79,25 +79,58 @@ impl ParticleWorld {
         self._dimensions._unit <= 1.0
     }
 
-    pub fn insert(&mut self, particle: Particle, x: u32, y: u32) -> bool {
-        if !self.contains_coords(x, y){
-            false
+    pub fn insert(&mut self, particle: Particle, x: f64, y: f64) -> bool {
+        if ! self.contains(x, y){
+            false;
         }
-        else if self.is_at_max_depth() && self._particle.is_none(){
-            self._particle = Some(particle);
-            true
-        }
-        else{
-        // This check is pretty dirty, might need to change later!
-            if self.is_leaf() && !self.is_at_max_depth(){
-                self.split_tree();
-            }
-            for child in &mut self._quadrants {
-                if child.as_mut().unwrap().contains_coords(x, y){
-                    return child.as_mut().unwrap().insert(particle, x, y);
+        else 
+            if self.is_at_max_depth(){
+                if self._particle.is_none(){
+                    self._particle = Some(particle);
+                    true;
+                }
+                else {
+                    false;
                 }
             }
-            false
+            else 
+                if self.is_leaf(){
+                    self.split_tree();
+                    for child in &mut self._quadrants{
+                        if child.as_ref().unwrap().contains(x, y){
+                            return self.insert(particle, x, y);
+                        }
+                    }
+                }
+                else{
+                    for child in &mut self._quadrants{
+                        if child.as_ref().unwrap().contains(x, y){
+                            return child.as_mut().unwrap().insert(particle, x, y);
+                        }
+                    }
+                }
+        false
+    }
+
+    pub fn get_quadrants(&self, data: &mut Vec<Square>){
+        if self.is_leaf(){
+            data.push(self._dimensions);
+        }
+        else {
+            for child in &self._quadrants{
+                child.as_ref().unwrap().get_quadrants(data);
+            }
+        }
+    }
+
+    pub fn get_particles(&self, data: &mut Vec<Square>){
+        if self.is_at_max_depth() && self._particle.is_some(){
+            data.push(self._dimensions);
+        }
+        else {
+            for child in &self._quadrants{
+                child.as_ref().unwrap().get_particles(data);
+            }
         }
     }
 
