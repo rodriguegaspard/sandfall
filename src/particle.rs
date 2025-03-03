@@ -1,11 +1,9 @@
-// Definition of the Particle class, which is the type of each "non-empty" pixel on the screen. 
-
 use wasm_bindgen::prelude::*;
 use crate::element::ElementTable;
 
 
+
 #[wasm_bindgen]
-#[derive(Clone, Debug)]
 pub struct Particle{
     _id: usize,
 }
