@@ -1,5 +1,5 @@
 # SANDFALL
-A falling-sand game written in Rust.
+A falling-sand game written in Rust. Work in progress.
 
 # INSTALLATION
 ## Linux/MacOS
