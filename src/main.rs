@@ -1,5 +1,4 @@
 pub mod particle;
-pub mod grid;
 pub mod events;
 pub mod universe;
 
