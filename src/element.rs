@@ -3,8 +3,8 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 #[derive(Debug)]
 pub struct Element{
-    _name : String,
-    _description : String
+    _name : &'static str,
+    _description : &'static str
 }
 
 #[wasm_bindgen]
@@ -19,24 +19,24 @@ impl Default for ElementTable{
             _table:
                 [
                 Element {
-                    _name: String::from("Water"),
-                    _description: String::from("Extinguishes fires, freezes into ice below 0C and turns into steam when above 100C.")
+                    _name: "Water",
+                    _description: "Extinguishes fires, freezes into ice below 0C and turns into steam when above 100C."
                 },
                 Element {
-                    _name: String::from("Fire"),
-                    _description: String::from("Heats up elements, and make some combusts. Releases smoke.")
+                    _name: "Fire",
+                    _description: "Heats up elements, and make some combusts. Releases smoke."
                 },
                 Element {
-                    _name: String::from("Dirt"),
-                    _description: String::from("Transforms into mud when in contact with water. Allows plants to grow on it.")
+                    _name: "Dirt",
+                    _description: "Transforms into mud when in contact with water. Allows plants to grow on it."
                 },
                 Element {
-                    _name: String::from("Stone"),
-                    _description: String::from("Extinguishes fires, freezes into ice below 0C and turns into steam when above 100C.")
+                    _name: "Stone",
+                    _description: "Extinguishes fires, freezes into ice below 0C and turns into steam when above 100C."
                 },
                 Element {
-                    _name: String::from("Oil"),
-                    _description: String::from("Floats on top of water and other, less dense liquids. Combusts when in contact of fire.")
+                    _name: "Oil",
+                    _description: "Floats on top of water and other, less dense liquids. Combusts when in contact of fire."
                 },
                 ] 
         }
@@ -44,11 +44,11 @@ impl Default for ElementTable{
 }
  
 impl ElementTable{
-    pub fn name(&self, id: usize) -> &String{
+    pub fn name(&self, id: usize) -> &str{
         &self._table[id]._name
     }
 
-    pub fn description(&self, id: usize) -> &String{
+    pub fn description(&self, id: usize) -> &str{
         &self._table[id]._description
     }
 } 
