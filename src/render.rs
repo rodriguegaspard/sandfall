@@ -1,7 +1,7 @@
 use wasm_bindgen::prelude::*;
 use web_sys::CanvasRenderingContext2d;
-use crate::universe::grid::*;
 use crate::particle::core::Particle;
+use crate::universe::grid::*;
 
 pub trait Renderer {
     // Change this into generic
@@ -10,17 +10,15 @@ pub trait Renderer {
 
 #[wasm_bindgen]
 pub struct ParticleRenderer;
-impl ParticleRenderer{
-    fn extract_coords(&self, index: &usize) -> (f64, f64){
-        return ((index % WIDTH) as f64, (index / WIDTH) as f64)
-    }
-}
+
 impl Renderer for ParticleRenderer{
     fn draw (&self, world: &Vec<Particle>, coords: &Vec<usize>, context: &CanvasRenderingContext2d) {
+            context.clear_rect(0.0, 0.0, 800.0, 800.0);
+            context.set_fill_style_str("black");
+            context.fill_rect(0.0, 0.0, 800.0, 800.0);
         for index in coords {
-            let coord = self.extract_coords(index);
             context.set_fill_style_str("blue");
-            context.fill_rect(coord.0, coord.1, 1.0, 1.0);
+            context.fill_rect((index % WIDTH) as f64, (index / HEIGHT) as f64, 5.0, 5.0);
         }
     }
 }
