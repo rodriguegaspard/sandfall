@@ -1,11 +1,13 @@
 use wasm_bindgen::prelude::*;
+use super::velocity::Force;
 
 #[wasm_bindgen]
 #[derive(Copy, Clone)]
 pub struct Particle{
     _id: usize,
     _updated: bool,
-    _deleted: bool
+    _deleted: bool,
+    _velocity: Force,
 }
 
 impl Particle{
@@ -13,7 +15,8 @@ impl Particle{
         Particle { 
             _id, 
             _updated: false, 
-            _deleted: false
+            _deleted: false,
+            _velocity: Force { _x: 0.0, _y: 0.0 }
         }
     }
 
@@ -21,7 +24,8 @@ impl Particle{
         Particle {
         _id: usize::MAX,
         _updated: false,
-        _deleted: false
+        _deleted: false,
+        _velocity: Force { _x: 0.0, _y: 0.0 }
         }
     }
 
@@ -35,6 +39,14 @@ impl Particle{
 
     pub fn is_deleted(&self) -> bool {
         self._deleted
+    }
+
+    pub fn set_velocity(&mut self) -> &mut Force{
+        &mut self._velocity
+    }
+
+    pub fn velocity(&self) -> Force {
+        self._velocity
     }
 
     pub fn update(&mut self, value: bool){

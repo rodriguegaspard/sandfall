@@ -1,5 +1,5 @@
 pub mod core;
-pub mod gravity;
+pub mod velocity;
 pub mod temperature;
 pub mod chemistry;
 
