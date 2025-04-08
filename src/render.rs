@@ -1,29 +1,26 @@
 use wasm_bindgen::prelude::*;
 use web_sys::CanvasRenderingContext2d;
-use crate::world::Square;
+use crate::grid::*;
+use crate::particle::Particle;
 
 pub trait Renderer {
-    fn draw (&self, data: &Vec<Square>, context: &CanvasRenderingContext2d);
+    // Change this into generic
+    fn draw (&self, world: &Vec<Particle>, coords: &Vec<usize>, context: &CanvasRenderingContext2d);
 }
 
 #[wasm_bindgen]
 pub struct ParticleRenderer;
-impl Renderer for ParticleRenderer{
-    fn draw (&self, data: &Vec<Square>, context: &CanvasRenderingContext2d) {
-        for point in data {
-            context.set_fill_style_str("blue");
-            context.fill_rect(point.x(), point.y(), point.unit(), point.unit());
-        }
+impl ParticleRenderer{
+    fn extract_coords(&self, index: &usize) -> (f64, f64){
+        return ((index % WIDTH) as f64, (index / WIDTH) as f64)
     }
 }
-
-#[wasm_bindgen]
-pub struct QuadrantRenderer;
-impl Renderer for QuadrantRenderer {
-    fn draw (&self, data: &Vec<Square>, context: &CanvasRenderingContext2d) {
-        for quadrant in data {
-            context.set_stroke_style_str("red");
-            context.stroke_rect(quadrant.x(), quadrant.y(), quadrant.unit(), quadrant.unit());
+impl Renderer for ParticleRenderer{
+    fn draw (&self, world: &Vec<Particle>, coords: &Vec<usize>, context: &CanvasRenderingContext2d) {
+        for index in coords {
+            let coord = self.extract_coords(index);
+            context.set_fill_style_str("blue");
+            context.fill_rect(coord.0, coord.1, 1.0, 1.0);
         }
     }
 }
