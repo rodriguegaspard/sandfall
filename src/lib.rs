@@ -1,14 +1,12 @@
-pub mod particle;
-pub mod grid;
-pub mod element;
 pub mod render;
-pub mod laws;
+pub mod universe;
 pub mod events;
+pub mod particle;
 
 use web_sys::HtmlCanvasElement;
 use web_sys::CanvasRenderingContext2d;
-use crate::grid::ParticleWorld;
-use crate::particle::Particle;
+use crate::particle::core::Particle;
+use crate::universe::grid::ParticleWorld;
 use crate::render::Renderer;
 use render::ParticleRenderer;
 

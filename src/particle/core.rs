@@ -37,11 +37,11 @@ impl Particle{
         self._deleted
     }
 
-    pub fn update(&mut self){
-        self._updated = !self._updated;
+    pub fn update(&mut self, value: bool){
+        self._updated = value;
     }
 
-    pub fn delete(&mut self){
-        self._deleted = true
+    pub fn delete(&mut self, value: bool){
+        self._deleted = value;
     }
 }

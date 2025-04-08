@@ -1,7 +1,7 @@
 use wasm_bindgen::prelude::*;
 use web_sys::CanvasRenderingContext2d;
-use crate::grid::*;
-use crate::particle::Particle;
+use crate::universe::grid::*;
+use crate::particle::core::Particle;
 
 pub trait Renderer {
     // Change this into generic

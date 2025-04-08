@@ -1,5 +1,6 @@
 use wasm_bindgen::prelude::*;
 use crate::particle::Particle;
+use crate::universe::core::World;
 
 pub const WIDTH: usize = 800;
 pub const HEIGHT: usize = 800;
@@ -57,7 +58,7 @@ impl ParticleWorld {
 
     pub fn delete(&mut self, x: usize, y: usize) -> bool {
         if self.is_valid(x, y){
-            self._current[y * WIDTH + x].delete();
+            self._current[y * WIDTH + x].delete(true);
             return true;
         }
         false
@@ -75,5 +76,16 @@ impl ParticleWorld {
         if self.is_within_bounds(x, y){
             self._next[y * WIDTH + x] = particle;
         }
+    }
+}
+
+impl World for ParticleWorld {
+    fn simulate(&mut self) {
+    for particle in self._current_active_particles.iter_mut() {
+    }
+    std::mem::swap(&mut self._current, &mut self._next);
+    for particle in self._next.iter_mut() {
+        particle.update(false);
+    }
     }
 }
