@@ -9,7 +9,8 @@ use universe::core::World;
 use universe::ParticleWorld;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
-use web_sys::{HtmlCanvasElement, CanvasRenderingContext2d, window, MouseEvent};
+use web_sys::window;
+use web_sys::{HtmlCanvasElement, CanvasRenderingContext2d, MouseEvent};
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -25,10 +26,14 @@ fn start_animation_loop(
     state: Rc<RefCell<AppState>>,
     world : Rc<RefCell<ParticleWorld>>,
     renderer: ParticleRenderer,
+    document: web_sys::Document,
 ) {
     let f = Rc::new(RefCell::new(None));
     let g = f.clone();
-    let mut counter = 1.0;
+
+    let mut last_time = window().unwrap().performance().unwrap().now();
+    let mut accumulator = 0.0;
+    const TICK_RATE: f64 = 1000.0 / 60.0; // ~16.6667ms per frame
 
     let closure = Closure::wrap(Box::new(move || {
         let state = state.borrow();
@@ -37,10 +42,21 @@ fn start_animation_loop(
             world.borrow_mut().insert(state.mouse_x as usize, state.mouse_y as usize, Particle::new(100));
         }
 
-        //Simulate & render
-        world.borrow_mut().simulate(counter);
+        let now = window().unwrap().performance().unwrap().now();
+        let delta = now - last_time;
+        last_time = now;
+
+        accumulator += delta;
+
+        // Add timers for simulation and rendering, might be interesting
+
+        while accumulator >= TICK_RATE {
+            world.borrow_mut().simulate(delta as f32);
+            accumulator -= TICK_RATE;
+            let fps = format!("{:05.2} fps", (1.0 / delta) * 1000.0);
+            document.get_element_by_id("fps_counter").unwrap().set_inner_html(&fps);
+        }
         renderer.draw(world.borrow().grid(), world.borrow().active_particles(), &context);
-        counter += 1.0;
 
         request_animation_frame(f.borrow().as_ref().unwrap());
     }) as Box<dyn FnMut()>);
@@ -60,7 +76,6 @@ fn request_animation_frame(f: &Closure<dyn FnMut()>) {
 #[wasm_bindgen(start)]
 pub fn start() -> Result<(), JsValue> {
     let document = window().unwrap().document().unwrap();
-    //let body = document.body().expect("document should have a body");
     let canvas = document
         .get_element_by_id("canvas")
         .unwrap()
@@ -73,7 +88,7 @@ pub fn start() -> Result<(), JsValue> {
 
     let w = Rc::new(RefCell::new(ParticleWorld::new()));
     let r = ParticleRenderer;
-
+    
     let state = Rc::new(RefCell::new(AppState {
         mouse_x: 0.0,
         mouse_y: 0.0,
@@ -109,6 +124,7 @@ pub fn start() -> Result<(), JsValue> {
     canvas.add_event_listener_with_callback("mouseup", closure.as_ref().unchecked_ref())?;
     closure.forget();
 
-    start_animation_loop(context.clone(), state.clone(), w, r);
+    start_animation_loop(context.clone(), state.clone(), w, r, document);
+    
     Ok(())
 }
