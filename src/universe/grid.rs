@@ -33,7 +33,7 @@ impl ParticleWorld {
     }
 
     fn is_within_bounds(&self, x: usize, y: usize) -> bool{
-        x <= HEIGHT && y <= WIDTH 
+        x < HEIGHT && y < WIDTH 
     }
 
     fn is_empty(&self, x: usize, y: usize) -> bool{
